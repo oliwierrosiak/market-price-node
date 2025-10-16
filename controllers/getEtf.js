@@ -12,7 +12,7 @@ async function getETF(req,res)
             const response = await axios.get(`https://query1.finance.yahoo.com/v8/finance/chart/${symbols[i]}?range=7d&interval=1d`)
             const last7d=response.data.chart.result[0].indicators.quote[0].close
             const clearResponse = response.data.chart.result[0].meta
-            responseObject.push({id:clearResponse.symbol,name:clearResponse.longName,currentPrice:clearResponse.regularMarketPrice,priceChange:clearResponse.regularMarketPrice-last7d.at(-2),percentChange:`${(clearResponse.regularMarketPrice - last7d.at(-2))/last7d.at(-2)*100}%`,sparkline:last7d})
+            responseObject.push({id:clearResponse.symbol,name:clearResponse.longName,currentPrice:clearResponse.regularMarketPrice,priceChange:clearResponse.regularMarketPrice-last7d.at(-2),percentPriceChange:(clearResponse.regularMarketPrice - last7d.at(-2))/last7d.at(-2)*100,sparkline:last7d})
         }
         catch(ex)
         {
