@@ -1,10 +1,12 @@
 import axios from "axios"
+import dotenv from 'dotenv'
+dotenv.config()
 
 const exchangeRat = async(target) =>
 {
     try
     {
-        const resp = await axios.get(`https://api.frankfurter.app/latest?from=USD&to=${target}`)
+        const resp = await axios.get(`${process.env.CurrencyApi}/latest?from=USD&to=${target}`)
         return resp.data.rates[target]
     }
     catch(ex)
@@ -20,7 +22,7 @@ async function getETF(req,res)
     const symbols = ['SPY','IVV','VOO','VTI','QQQ','EFA','EEM','VEA','VWO','XLK','XLF','XLE','XLV','XLY','GLD','IAU','SLV','USO','TLT','IEF','ARKK','SOXX','SMH','BOTZ','SPXS.L','VUAA.L','EQQQ.L','ISF.L','ITOT','IWM','VB','VTV','VUG','SCHD','BND','DIA','IXUS','VXUS','VEU','XLP','XLI','QQQM']
     const promises = symbols.map(x=>
     {
-        return axios.get(`https://query1.finance.yahoo.com/v8/finance/chart/${x}?range=7d&interval=1d`)
+        return axios.get(`${process.env.ETFApi}/${x}?range=7d&interval=1d`)
         .then(response=>{
             const last7d=response.data.chart.result[0].indicators.quote[0].close
             const clearResponse = response.data.chart.result[0].meta

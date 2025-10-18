@@ -1,4 +1,6 @@
 import axios from "axios"
+import dotenv from 'dotenv'
+dotenv.config()
 
 const currencySymbols = [
   "USD","EUR","JPY","GBP","AUD","CAD","CHF","CNY","HKD","NZD","SEK","KRW","SGD","NOK","MXN","INR","RUB","ZAR","TRY","BRL","PLN","THB","TWD","DKK","MYR","IDR","CZK","HUF","ILS","SAR","AED","PHP","CLP","COP","PEN","EGP","PKR","VND","NGN","KWD","QAR","ARS","UAH","RON","HRK","BGN","LKR","BDT","MAD","KES","GHS","DZD"
@@ -6,7 +8,7 @@ const currencySymbols = [
 
 const getHistoricData = async(date,currency)=>{
     return new Promise(async(resolve,reject)=>{
-        resolve(axios.get(`https://api.frankfurter.app/${date}?from=${currency}&to=${currencySymbols.join(',')}`))
+        resolve(axios.get(`${process.env.CurrencyApi}/${date}?from=${currency}&to=${currencySymbols.join(',')}`))
     })
 }
 
@@ -26,7 +28,7 @@ async function getCurrencies(req,res)
     const promises = []
     try
     {
-        const response = await axios.get(`https://api.frankfurter.app/latest?from=${currency}&to=${currencySymbols.join(',')}`)
+        const response = await axios.get(`${process.env.CurrencyApi}/latest?from=${currency}&to=${currencySymbols.join(',')}`)
         if(response?.data?.rates)
         {
             for(const key in response.data.rates)
