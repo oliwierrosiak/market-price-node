@@ -16,6 +16,7 @@ async function getCurrencies(req,res)
     const dates = []
     const dateNow = new Date()
     const responseObject = []
+   
 
     for(let i = 1;i<8;i++)
     {   
@@ -30,7 +31,7 @@ async function getCurrencies(req,res)
         {
             for(const key in response.data.rates)
             {
-                responseObject.push({id:key.toLowerCase(),name:key,currentPrice:1/response.data.rates[key],sparkline:[]})
+                responseObject.push({id:key.toLowerCase(),name:`1 ${key}`,currentPrice:1/response.data.rates[key],sparkline:[]})
             }
             dates.forEach(date=>{
                 promises.push(getHistoricData(date,currency))
@@ -40,14 +41,35 @@ async function getCurrencies(req,res)
                 const array = x.data.rates
                 for(const key in array)
                 {
-                    const idx = responseObject.findIndex(x=>x.name === key)
+                    const idx = responseObject.findIndex(x=>x.id === key.toLowerCase())
                     responseObject[idx].sparkline.push(1/array[key])
                 }
             })
+            for(let i =0;i<responseObject.length;i++)
+            {
+                responseObject[i].sparkline = responseObject[i].sparkline.reverse()
+                responseObject[i].priceChange = responseObject[i].currentPrice - responseObject[i].sparkline.at(-2)
+                responseObject[i].percentPriceChange = (responseObject[i].currentPrice - responseObject[i].sparkline.at(-2))/responseObject[i].sparkline.at(-2)*100
+                try
+                {
+                    if(responseObject[i].id.toUpperCase() === "EUR")
+                    {
+                        responseObject[i].image = `https://flagcdn.com/eu.svg`
+                    }
+                    else
+                    {
+                        const countries = await axios.get(`https://restcountries.com/v3.1/currency/${responseObject[i].id.toUpperCase()}`)
+                        const country = countries.data.sort((a,b)=>b.population - a.population)[0]
+                        responseObject[i].image = country.flags.svg
+                    }
+                }
+                catch(ex)
+                {
+                    console.log(ex)
+                }
+            }
             responseObject.forEach(x=>{
-                x.sparkline = x.sparkline.reverse()
-                x.priceChange = x.currentPrice - x.sparkline.at(-2)
-                x.percentPriceChange = (x.currentPrice - x.sparkline.at(-2))/x.sparkline.at(-2)*100
+               
 
             })
             res.status(200).json(responseObject)
@@ -67,3 +89,5 @@ async function getCurrencies(req,res)
 }
 
 export default getCurrencies
+
+//Dodac zwracnie linku do flag krajów poszczególnych walut
