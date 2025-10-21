@@ -67,7 +67,6 @@ async function getCurrencies(req,res)
                 }
                 catch(ex)
                 {
-                    console.log(ex)
                 }
             }
             responseObject.forEach(x=>{
