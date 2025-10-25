@@ -49,18 +49,19 @@ async function getCurrencies(req,res)
             })
             for(let i =0;i<responseObject.length;i++)
             {
+                
                 responseObject[i].sparkline = responseObject[i].sparkline.reverse()
-                responseObject[i].priceChange = responseObject[i].currentPrice - responseObject[i].sparkline.at(-2)
-                responseObject[i].percentPriceChange = (responseObject[i].currentPrice - responseObject[i].sparkline.at(-2))/responseObject[i].sparkline.at(-2)*100
+                responseObject[i].priceChange = Number((responseObject[i].currentPrice - responseObject[i].sparkline.at(-2).toFixed(3)).toFixed(3))
+                responseObject[i].percentPriceChange = Number((responseObject[i].currentPrice - responseObject[i].sparkline.at(-2).toFixed(3)).toFixed(3))/(Number(responseObject[i].sparkline.at(-2).toFixed(3))||1)*100
                 try
                 {
                     if(responseObject[i].id.toUpperCase() === "EUR")
                     {
-                        responseObject[i].image = `https://flagcdn.com/eu.svg`
+                        responseObject[i].image = process.env.EUImg
                     }
                     else
                     {
-                        const countries = await axios.get(`https://restcountries.com/v3.1/currency/${responseObject[i].id.toUpperCase()}`)
+                        const countries = await axios.get(`${process.env.CountriesInfo}/currency/${responseObject[i].id.toUpperCase()}`)
                         const country = countries.data.sort((a,b)=>b.population - a.population)[0]
                         responseObject[i].image = country.flags.svg
                     }
@@ -69,10 +70,6 @@ async function getCurrencies(req,res)
                 {
                 }
             }
-            responseObject.forEach(x=>{
-               
-
-            })
             res.status(200).json(responseObject)
         }
         else

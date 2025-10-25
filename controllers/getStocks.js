@@ -17,7 +17,7 @@ const convertCurrencies = (base,target,amount)=>{
 
 const getImg = (symbol)=>{
     return new Promise((resolve,reject)=>{
-        resolve(axios.get(`https://api.api-ninjas.com/v1/logo?ticker=${symbol}`,{headers:{"X-Api-Key":'58y2ThdKKKeLujhPkZz+fA==1GiEmcwJcROkipk8'}}).catch(ex=>null))
+        resolve(axios.get(`${process.env.StockIcons}/logo?ticker=${symbol}`,{headers:{"X-Api-Key":'58y2ThdKKKeLujhPkZz+fA==1GiEmcwJcROkipk8'}}).catch(ex=>null))
     })
 }
 
@@ -25,11 +25,8 @@ async function getStocks(req,res)
 {
     const currency = req.query.currency.toUpperCase()
 
-    const responseObject = []
-
     const promises = []
     const stockSymbols = ["AAPL", "MSFT", "GOOG", "AMZN", "META", "NVDA", "TSLA", "NFLX", "ADBE","INTC", "AMD", "CSCO", "CRM", "ORCL", "PYPL", "AVGO", "QCOM", "IBM", "TXN","PEP", "KO", "MCD", "NKE", "PG", "WMT", "DIS", "HD", "V", "MA","BA", "CAT", "UPS", "FDX", "GE", "MMM", "HON", "DE", "GM", "F","XOM", "CVX", "COP", "JPM", "BAC", "C", "GS", "MS", "WFC", "AXP","UNH", "JNJ", "PFE", "ABBV", "MRK", "LLY", "T", "VZ", "KO", "PEP","SHEL", "BP", "ULVR", "AZN", "GSK", "HSBA", "RIO", "BHP", "NESN", "NOVN","SAP", "SIEGY", "BMWYY", "DDAIF", "ADS", "BAYRY", "OR.PA", "AIR.PA", "SAN.PA", "BN.PA","TM", "SONY","NSANY", "NMR", "NTDOY", "6758.T", "7203.T", "9984.T", "TCEHY", "BABA","JD", "PDD", "NIO", "LI", "BYDDY", "TSM", "UMC", "SSNLF", "HMC", "SMFG"];
-    // const stockSymbols = ["AAPL"];
 
     for(const key of stockSymbols)
     {
