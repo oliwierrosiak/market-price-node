@@ -18,7 +18,7 @@ const exchangeRat = async(target) =>
 
 async function getETF(req,res)
 {
-
+    
     const symbols = ['SPY','IVV','VOO','VTI','QQQ','EFA','EEM','VEA','VWO','XLK','XLF','XLE','XLV','XLY','GLD','IAU','SLV','USO','TLT','IEF','ARKK','SOXX','SMH','BOTZ','SPXS.L','VUAA.L','EQQQ.L','ISF.L','ITOT','IWM','VB','VTV','VUG','SCHD','BND','DIA','IXUS','VXUS','VEU','XLP','XLI','QQQM']
     const promises = symbols.map(x=>
     {
